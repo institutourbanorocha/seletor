@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instituto Urbano Rocha · Aulas de Música</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8cc80;
+    --gold-dark: #8b6914;
+    --cream: #f7f2e8;
+    --ivory: #faf7f2;
+    --dark: #1a1410;
+    --dark-mid: #2d2318;
+    --brown: #3d2b1a;
+    --text: #3a2e22;
+    --text-light: #7a6a55;
+    --border: rgba(201,168,76,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Background texture ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.04) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Header ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 3.5rem 2rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .ornament-line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.6;
+  }
+
+  .music-icon {
+    font-size: 1.4rem;
+    color: var(--gold);
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.7; text-shadow: 0 0 8px rgba(201,168,76,0.3); }
+    50% { opacity: 1; text-shadow: 0 0 20px rgba(201,168,76,0.7); }
+  }
+
+  .institute-name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+
+  .institute-name span {
+    color: var(--gold);
+  }
+
+  .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+  }
+
+  /* ── Main layout ── */
+  main {
+    position: relative;
+    z-index: 5;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* ── Tabs ── */
+  .tabs-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs-nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    padding: 0.75rem 1.4rem 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.35s ease;
+    flex-shrink: 0;
+  }
+
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .tab-btn:hover { color: var(--gold-light); }
+  .tab-btn.active { color: var(--gold); }
+  .tab-btn.active::after { transform: scaleX(1); }
+
+  /* ── Tab panels ── */
+  .tab-panel {
+    display: none;
+    animation: fadeUp 0.45s cubic-bezier(0.4,0,0.2,1);
+  }
+  .tab-panel.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── ABOUT panel ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .about-card {
+    background: rgba(26,20,16,0.95);
+    padding: 2.2rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+
+  .about-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .about-card:hover { background: rgba(45,35,24,0.95); }
+  .about-card:hover::before { opacity: 1; }
+
+  .about-card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .about-card-label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+
+  .about-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .about-card p {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: rgba(247,242,232,0.65);
+    font-weight: 300;
+  }
+
+  /* Quem somos span full */
+  .about-card.full {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about-emblem {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--gold);
+    flex-shrink: 0;
+    background: rgba(201,168,76,0.05);
+    box-shadow: 0 0 30px rgba(201,168,76,0.1);
+  }
+
+  /* ── SERVICES / COURSES panels ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .service-card {
+    background: rgba(26,20,16,0.9);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    group: card;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .service-card:hover {
+    border-color: rgba(201,168,76,0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.1);
+  }
+
+  .service-card:hover::before { opacity: 1; }
+
+  .card-category {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.25;
+    margin-bottom: 0.7rem;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: rgba(247,242,232,0.5);
+    font-weight: 300;
+    margin-bottom: 1.3rem;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: gap 0.3s ease, color 0.3s ease;
+  }
+
+  .card-link:hover { gap: 0.9rem; color: var(--gold-light); }
+
+  .card-link-arrow {
+    width: 18px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+    transition: width 0.3s ease;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+
+  .card-link-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -3px;
+    width: 6px;
+    height: 6px;
+    border-right: 1px solid var(--gold);
+    border-top: 1px solid var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .service-card:hover .card-link-arrow { width: 26px; }
+
+  /* ── Card icon top-right ── */
+  .card-icon {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    opacity: 0.15;
+    transition: opacity 0.3s ease;
+  }
+
+  .service-card:hover .card-icon { opacity: 0.35; }
+
+  /* ── Featured badge ── */
+  .badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.7rem;
+    border-radius: 1px;
+  }
+
+  /* ── Section divider ── */
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Footer ── */
+  footer {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: rgba(201,168,76,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-card.full { grid-template-columns: 1fr; }
+    .about-emblem { display: none; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .tab-btn { padding: 0.65rem 1rem 0.85rem; font-size: 0.6rem; }
+  }
+  /* ── U.T.I. DA MÚSICA styles ── */
+  .tab-btn.uti-tab {
+    color: rgba(220,80,80,0.6);
+  }
+  .tab-btn.uti-tab:hover { color: rgba(240,120,120,0.9); }
+  .tab-btn.uti-tab.active {
+    color: #e05555;
+  }
+  .tab-btn.uti-tab::after {
+    background: linear-gradient(90deg, transparent, #e05555, transparent);
+  }
+
+  .uti-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem 2.5rem;
+    background: rgba(30,10,10,0.95);
+    border: 1px solid rgba(220,80,80,0.2);
+    border-radius: 2px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+  }
+
+  .uti-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e05555, transparent);
+  }
+
+  .uti-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 10% 50%, rgba(220,80,80,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .uti-icon-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(220,80,80,0.3);
+    border-radius: 50%;
+    background: rgba(220,80,80,0.06);
+    z-index: 2;
+  }
+
+  .uti-main-icon { font-size: 2.4rem; }
+
+  .uti-pulse-ring {
+    position: absolute;
+    left: 2.5rem;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    border: 1px solid rgba(220,80,80,0.3);
+    border-radius: 50%;
+    animation: uti-pulse 2.5s ease-out infinite;
+    z-index: 1;
+  }
+
+  .uti-pulse-ring--2 {
+    animation-delay: 1.25s;
+  }
+
+  @keyframes uti-pulse {
+    0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+  }
+
+  .uti-hero-text { z-index: 2; }
+
+  .uti-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 600;
+    color: #f0a0a0;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .uti-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: rgba(240,160,160,0.65);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .uti-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #e05555;
+    border: 1px solid rgba(220,80,80,0.4);
+    padding: 0.65rem 1.4rem;
+    text-decoration: none;
+    border-radius: 1px;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    gap: 0.5rem;
+  }
+
+  .uti-cta-btn:hover {
+    background: rgba(220,80,80,0.12);
+    color: #f08080;
+    border-color: rgba(220,80,80,0.7);
+  }
+
+  .uti-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .uti-feature {
+    background: rgba(26,10,10,0.9);
+    border: 1px solid rgba(220,80,80,0.12);
+    padding: 1.6rem 1.4rem;
+    border-radius: 2px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .uti-feature:hover {
+    border-color: rgba(220,80,80,0.3);
+    background: rgba(40,15,15,0.95);
+  }
+
+  .uti-feature-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .uti-feature h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f0a0a0;
+    margin-bottom: 0.6rem;
+  }
+
+  .uti-feature p {
+    font-size: 0.83rem;
+    line-height: 1.7;
+    color: rgba(247,232,232,0.5);
+    font-weight: 300;
+  }
+
+  .uti-link-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px dashed rgba(220,80,80,0.2);
+    border-radius: 2px;
+  }
+
+  .uti-link-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(220,80,80,0.5);
+  }
+
+  .uti-link-url {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #e05555;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+
+  .uti-link-url:hover { color: #f08080; text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .uti-hero { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+    .uti-pulse-ring { left: 50%; }
+    .uti-features-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-ornament">
+    <div class="ornament-line"></div>
+    <div class="music-icon">♩</div>
+    <div class="ornament-line"></div>
+  </div>
+  <h1 class="institute-name">Instituto <span>Urbano Rocha</span></h1>
+  <p class="tagline">Arte · Formação · Expressão Musical</p>
+</header>
+
+<main>
+  <!-- TABS NAV -->
+  <nav class="tabs-nav" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('about')" role="tab">Sobre Nós</button>
+    <button class="tab-btn" onclick="switchTab('cursos')" role="tab">Cursos</button>
+    <button class="tab-btn" onclick="switchTab('servicos')" role="tab">Serviços</button>
+    <button class="tab-btn" onclick="switchTab('empreendedorismo')" role="tab">Empreendedorismo</button>
+    <button class="tab-btn uti-tab" onclick="switchTab('uti')" role="tab">U.T.I. da Música</button>
+    <button class="tab-btn" onclick="switchTab('mentoria')" role="tab">Mentoria</button>
+  </nav>
+
+  <!-- ══ PANEL: SOBRE NÓS ══ -->
+  <div id="panel-about" class="tab-panel active">
+    <div class="about-grid">
+
+      <div class="about-card full">
+        <div class="about-emblem">♪</div>
+        <div>
+          <div class="about-card-label">Quem Somos</div>
+          <h3>Uma escola para quem leva a música a sério</h3>
+          <p>O Instituto Urbano Rocha é um espaço dedicado ao ensino musical com profundidade artística e rigor pedagógico. Fundado com a missão de democratizar o acesso à formação musical de excelência, reunimos metodologias inovadoras, repertório especializado e uma curadoria de conteúdos que abrange do violão clássico ao universo das cerimônias, da leitura de partituras à produção sonora digital.</p>
+        </div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-label">Missão</div>
+        <h3>Formar músicos conscientes e criativos</h3>
+        <p>Oferecer ensino musical de alto nível, acessível e contextualizado, capacitando alunos a desenvolverem identidade artística própria e autonomia técnica em sua trajetória musical.</p>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-label">Visão</div>
+        <h3>Referência nacional em educação musical</h3>
+        <p>Ser reconhecido como polo de excelência no ensino de música no Brasil, integrando tradição, inovação pedagógica e tecnologia para transformar a experiência de aprender e ensinar música.</p>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-label">Valores</div>
+        <h3>Arte com propósito e rigor</h3>
+        <p>Comprometemos-nos com a excelência técnica, a criatividade sem limites, o respeito à diversidade musical e a construção de uma comunidade vibrante de aprendizes e artistas.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: CURSOS ══ -->
+  <div id="panel-cursos" class="tab-panel">
+    <div class="section-title">Formação Instrumental & Teórica</div>
+    <div class="cards-grid">
+
+      <a class="service-card" href="https://urbajoe.github.io/augustin_barrios/" target="_blank">
+        <span class="card-icon">🎸</span>
+        <div class="badge">Especialista</div>
+        <div class="card-category">Violão Clássico</div>
+        <div class="card-title">Curso de Violão Clássico — Agustín Barrios</div>
+        <div class="card-desc">Mergulhe no universo poético e técnico do genial violonista paraguaio. Um percurso aprofundado pelas obras-primas de Mangoré, essencial para violonistas que buscam expressividade e virtuosismo.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/curso_mauro_giuliani/" target="_blank">
+        <span class="card-icon">🎸</span>
+        <div class="badge">Especialista</div>
+        <div class="card-category">Violão Clássico</div>
+        <div class="card-title">Curso de Violão Clássico — Mauro Giuliani</div>
+        <div class="card-desc">Imersão no repertório e técnica do grande mestre italiano. Um percurso especializado para violonistas que buscam excelência interpretativa.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/carcassi/" target="_blank">
+        <span class="card-icon">🎸</span>
+        <div class="badge">Especialista</div>
+        <div class="card-category">Violão Clássico</div>
+        <div class="card-title">Curso de Violão Clássico — Matteo Carcassi</div>
+        <div class="card-desc">Estudo aprofundado das obras e técnicas do mestre Matteo Carcassi. Um percurso essencial para violonistas clássicos que buscam refinamento expressivo e domínio do repertório romântico.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/curso_Arte_Tremulo/" target="_blank">
+        <span class="card-icon">🎶</span>
+        <div class="badge">Especialista</div>
+        <div class="card-category">Técnica · Neurociência</div>
+        <div class="card-title">A Arte do Tremolo — Método Vladimir Bobri</div>
+        <div class="card-desc">Domine o tremolo unindo a metodologia rigorosa de Vladimir Bobri à neurociência do aprendizado motor. Mielinização, chunking e prática mental para um tremolo fluido e expressivo.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/curso_violao_classico/" target="_blank">
+        <span class="card-icon">🎼</span>
+        <div class="card-category">Violão Clássico</div>
+        <div class="card-title">Curso de Violão Clássico</div>
+        <div class="card-desc">Fundamentos e aprofundamento técnico no violão erudito — postura, dedilhado, interpretação e literatura do instrumento.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/curso_isaias_savio/" target="_blank">
+        <span class="card-icon">🎼</span>
+        <div class="badge">Especialista</div>
+        <div class="card-category">Violão Clássico</div>
+        <div class="card-title">Curso de Violão Clássico — Isaías Sávio</div>
+        <div class="card-desc">Da tradição de Isaías Sávio à neurociência moderna. Uma abordagem pedagógica inovadora que une o rigor técnico do fundador do violão clássico brasileiro às mais recentes descobertas do aprendizado musical otimizado.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/curso_violao_popular_jazz/" target="_blank">
+        <span class="card-icon">🎷</span>
+        <div class="card-category">Violão Popular · Jazz</div>
+        <div class="card-title">Violão Popular & Jazz</div>
+        <div class="card-desc">Da harmonia popular brasileira ao jazz contemporâneo. Improvisação, voicings, grooves e linguagem moderna para o violonista versátil.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/art_parts/" target="_blank">
+        <span class="card-icon">📖</span>
+        <div class="card-category">Teoria Musical</div>
+        <div class="card-title">A Arte de Ler Partitura Musical</div>
+        <div class="card-desc">Decodifique a linguagem escrita da música. Curso prático e direto para desenvolver fluência na leitura musical com autonomia e prazer.</div>
+        <span class="card-link">Acessar curso <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/repertorio-cerimoniais/" target="_blank">
+        <span class="card-icon">💍</span>
+        <div class="card-category">Música Cerimonial</div>
+        <div class="card-title">Repertório para Cerimoniais</div>
+        <div class="card-desc">Curadoria completa de repertório para casamentos, formaturas e eventos sociais. Arranjos, sugestões e guias de execução para músicos cerimonialistas.</div>
+        <span class="card-link">Acessar repertório <span class="card-link-arrow"></span></span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: SERVIÇOS ══ -->
+  <div id="panel-servicos" class="tab-panel">
+    <div class="section-title">Soluções para Músicos & Produtores</div>
+    <div class="cards-grid">
+
+      <a class="service-card" href="https://urbajoe.github.io/audio_apresentacao/" target="_blank">
+        <span class="card-icon">🎙️</span>
+        <div class="card-category">Produção Sonora</div>
+        <div class="card-title">Áudio — Apresentação Institucional</div>
+        <div class="card-desc">Serviço de criação de identidade sonora e áudio institucional. Apresente sua empresa, projeto ou evento com uma trilha musical exclusiva e profissional.</div>
+        <span class="card-link">Conhecer serviço <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/estudio_didatico_digital/" target="_blank">
+        <span class="card-icon">🎚️</span>
+        <div class="card-category">Assessoria · Produção</div>
+        <div class="card-title">Mini Estúdio Didático Digital</div>
+        <div class="card-desc">Assessoria completa para montagem e operação de estúdio doméstico voltado ao ensino. Da escolha do equipamento à configuração ideal para gravação e aulas online.</div>
+        <span class="card-link">Saiba mais <span class="card-link-arrow"></span></span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: EMPREENDEDORISMO ══ -->
+  <div id="panel-empreendedorismo" class="tab-panel">
+    <div class="section-title">Método Arcos · Negócios na Música</div>
+    <div class="cards-grid">
+
+      <a class="service-card" href="https://urbajoe.github.io/metodo_arcos_investidor/" target="_blank">
+        <span class="card-icon">💼</span>
+        <div class="badge">Para Investidores</div>
+        <div class="card-category">Empreendedorismo Musical</div>
+        <div class="card-title">Método Arcos — Investidor</div>
+        <div class="card-desc">Conteúdo estratégico para quem deseja investir no mercado musical. Entenda o ecossistema, os modelos de negócio e as oportunidades do setor.</div>
+        <span class="card-link">Acessar método <span class="card-link-arrow"></span></span>
+      </a>
+
+      <a class="service-card" href="https://urbajoe.github.io/metodo_arcos/" target="_blank">
+        <span class="card-icon">🎯</span>
+        <div class="badge">Para Músicos</div>
+        <div class="card-category">Empreendedorismo Musical</div>
+        <div class="card-title">Método Arcos — Usuário</div>
+        <div class="card-desc">O guia prático do músico empreendedor. Desenvolva sua carreira com sustentabilidade financeira, posicionamento e visão de negócio no mercado da música.</div>
+        <span class="card-link">Acessar método <span class="card-link-arrow"></span></span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: U.T.I. DA MÚSICA ══ -->
+  <div id="panel-uti" class="tab-panel">
+    <div class="uti-hero">
+      <div class="uti-pulse-ring"></div>
+      <div class="uti-pulse-ring uti-pulse-ring--2"></div>
+      <div class="uti-icon-wrap">
+        <span class="uti-main-icon">🩺</span>
+      </div>
+      <div class="uti-hero-text">
+        <div class="about-card-label" style="justify-content:center;margin-bottom:0.5rem;">Plataforma Especializada</div>
+        <h2 class="uti-title">U.T.I. da Música</h2>
+        <p class="uti-subtitle">Unidade de Tratamento Intensivo para músicos em evolução acelerada</p>
+        <a href="https://www.utidamusica.com.br" target="_blank" class="uti-cta-btn">
+          Acessar a Plataforma
+          <span class="card-link-arrow" style="display:inline-block;margin-left:10px;"></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="uti-features-grid">
+      <div class="uti-feature">
+        <div class="uti-feature-icon">⚡</div>
+        <h4>Diagnóstico Musical</h4>
+        <p>Identifique com precisão os pontos críticos da sua técnica e trajetória musical para uma evolução direcionada e eficiente.</p>
+      </div>
+      <div class="uti-feature">
+        <div class="uti-feature-icon">🎯</div>
+        <h4>Tratamento Intensivo</h4>
+        <p>Conteúdos concentrados e metodologia de alta performance para superar bloqueios e acelerar o desenvolvimento artístico.</p>
+      </div>
+      <div class="uti-feature">
+        <div class="uti-feature-icon">📈</div>
+        <h4>Monitoramento de Evolução</h4>
+        <p>Acompanhe seu progresso com clareza. Cada etapa planejada para que você saia da UTI mais forte, técnico e expressivo.</p>
+      </div>
+    </div>
+
+    <div class="uti-link-banner">
+      <span class="uti-link-label">Acesse agora:</span>
+      <a href="https://www.utidamusica.com.br" target="_blank" class="uti-link-url">www.utidamusica.com.br</a>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: MENTORIA ══ -->
+  <div id="panel-mentoria" class="tab-panel">
+    <div class="section-title">Desenvolvimento Personalizado</div>
+    <div class="cards-grid">
+
+      <a class="service-card" href="https://institutourbanorocha.github.io/mentoria/" target="_blank">
+        <span class="card-icon">🎓</span>
+        <div class="badge">Individual</div>
+        <div class="card-category">Mentoria Musical</div>
+        <div class="card-title">Mentoria — Instituto Urbano Rocha</div>
+        <div class="card-desc">Acompanhamento personalizado para músicos que buscam evolução acelerada. Diagnóstico preciso, plano de desenvolvimento sob medida e orientação direta com o professor Urbano Rocha.</div>
+        <span class="card-link">Conhecer a mentoria <span class="card-link-arrow"></span></span>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2025 Instituto Urbano Rocha · Arte, Formação e Expressão Musical
+</footer>
+
+<script>
+  function switchTab(id) {
+    // Deactivate all
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+    // Activate selected
+    const panels = {
+      'about': 0, 'cursos': 1, 'servicos': 2, 'empreendedorismo': 3, 'uti': 4, 'mentoria': 5
+    };
+    document.querySelectorAll('.tab-btn')[panels[id]].classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+  }
+</script>
+</body>
+</html>
